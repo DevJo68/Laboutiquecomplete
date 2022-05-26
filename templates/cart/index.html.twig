@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre panier - La Boutique Complete{% endblock %}
+
+{% block content %}
+
+    {% if cart|length > 0 %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Produit</th>
+            <th scope="col"></th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Prix</th>
+            <th scope="col">Total</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set total = null %}
+        {% for elem in cart %}
+
+            <tr>
+                <th>
+                    <img src="/uploads/{{elem.product.illustration}}" alt="{{elem.product.illustration}}" height="75px">
+                </th>
+                <td>
+                   <strong>{{ elem.product.name}}</strong><br/>
+                    <small>{{ elem.product.subtitle}}</small>
+                </td>
+
+                <td> <a href="{{ path('add_to_cart', {'id': elem.product.id }) }}"><i class="fa-solid fa-plus"></i></a> x {{ elem.quantity}}
+                    <a href="{{ path('decrease_to_cart', {'id': elem.product.id }) }}"><i class="fa-solid fa-minus"></i></a></td>
+
+                <td>{{(elem.product.price / 100)| number_format(2,',','.') }}€</td>
+                <td>{{(elem.product.price * elem.quantity / 100)| number_format(2,',','.') }}€</td>
+                <td><a href="{{ path('decrease_to_cart',{'id': elem.product.id }) }}" alt="Supprimer mon produit"><i class="fa-solid fa-trash-can"></i></a></td>
+            </tr>
+            {% set total = total + (elem.product.price * elem.quantity/ 100) %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-right mb-5">
+        <b>Nombre de produits</b> {{ cart|length }}:
+        <br>
+        <b>Total de mon panier</b> {{ (total )| number_format(2,',','.')}}€
+        <a href="{{ path('order')}}" class="btn btn-success btn-block"> Valider mon panier</a>
+    </div>
+    {% else %}
+    <hr>
+    <p><b>Votre panier est vide</b></p>
+    {% endif%}
+{% endblock%}
