@@ -34,6 +34,11 @@ class OrderDetails
         return $this->id;
     }
 
+    public function __toString(): string
+    {
+        return $this->getProduct()." x ".$this->getQuantity();
+    }
+
     public function getMyOrder(): ?Order
     {
         return $this->myOrder;

@@ -14,13 +14,13 @@ class Carrier
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private ?string $name;
 
     #[ORM\Column(type: 'text')]
-    private $description;
+    private ?string $description;
 
     #[ORM\Column(type: 'float')]
-    private $price;
+    private ?float $price;
 
     public function getId(): ?int
     {
@@ -34,7 +34,7 @@ class Carrier
 
     public function __toString()
     {
-        return $this->getName().'[br]'.$this->getDescription().'[br]'.number_format($this->getPrice(),2,',',',').'€';
+        return $this->getName().'[br]'.$this->getDescription().'[br]'.number_format(($this->getPrice() /100),2,',',',').'€';
     }
 
     public function setName(string $name): self

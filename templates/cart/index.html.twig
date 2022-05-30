@@ -41,6 +41,7 @@
         </tbody>
     </table>
     <div class="text-right mb-5">
+        <a href="{{ path('products')}}" class="btn btn-info btn-block col-md-3">Ajouter d'autres produits au panier</a>
         <b>Nombre de produits</b> {{ cart|length }}:
         <br>
         <b>Total de mon panier</b> {{ (total )| number_format(2,',','.')}}€

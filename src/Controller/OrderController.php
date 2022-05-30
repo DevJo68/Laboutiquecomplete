@@ -7,6 +7,8 @@ use App\Entity\Order;
 use App\Entity\OrderDetails;
 use App\Form\OrderType;
 use Doctrine\ORM\EntityManagerInterface;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,6 +73,8 @@ class OrderController extends AbstractController
 
             //Enregistrer ma commande Order
             $order = new Order();
+            $reference = $date->format('dmY').'-'.uniqid();
+            $order->setReference($reference);
             $order->setUser($this->getUser());
             $order->setCreatedAt($date);
             $order->setCarrierName($carriers->getName());
@@ -81,18 +85,21 @@ class OrderController extends AbstractController
             //On persiste l'order pour l'intégrer en base de données
             $this->entityManager->persist($order);
 
-
+             $product_for_stripe = [];
+             $YOUR_DOMAIN = 'http://localhost:8000';
             // Enregistrer mes produits OrderDetails
             foreach  ($cart->getFull() as $product){
                 $orderDetails = new OrderDetails();
                 $orderDetails->setMyOrder($order);
-                $orderDetails->setMyOrder($product['product']->getName());
+                $orderDetails->setProduct($product['product']->getName());
                 $orderDetails->setQuantity($product['quantity']);
                 $orderDetails->setPrice($product['product']->getPrice());
                 $orderDetails->setTotal($product['product']->getPrice() * $product['quantity']);
                 //On persiste chaque orderDetails pour les ajouter en base de données
                 $this->entityManager->persist($orderDetails);
+
             }
+
 
             // Le flush à la fin pour valider toutes les transactions en base de données
             $this->entityManager->flush();
@@ -101,7 +108,8 @@ class OrderController extends AbstractController
             return $this->render('order/add.html.twig',[
                 'cart' => $cart->getFull(),
                 'carrier' => $carriers,
-                'delivery' => $delivery_content
+                'delivery' => $delivery_content,
+                'reference' => $order->getReference()
             ]);
         }
 
