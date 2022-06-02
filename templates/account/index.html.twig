@@ -2,11 +2,29 @@
 
 {% block title %}Mon compte - La Boutique Complete {% endblock %}
 
-{% block content%}
+{% block content %}
     <h1>Mon compte</h1>
     Bienvenue sur votre compte  {{ app.user.firstname }}
     {# dump(app.user.lastname) l'objet app permet de récupérer la request, les reponse ou encore les objet des classes(user, produit,ect...) #}
-    - <a href="{{ path('account_password')}}">Modifier mon mot de passe</a>
-    - <a href="{{ path('account_address')}}">Gérer mes adresses</a>
+    <hr><br/>
 
-{%endblock%}
+    <div class="row">
+        {% if is_granted('ROLE_ADMIN')%}
+            <div class="col-md-4">
+                <div class="account-item">
+                    <a href="{{ path('account_password')}}">Modifier mon mot de passe</a>
+                </div>
+            </div>
+        {% endif %}
+        <div class="col-md-4">
+            <div class="account-item">
+                <a href="{{ path('account_address')}}">Gérer mes adresses</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="account-item">
+                <a href="{{ path('account_order')}}">Mes commandes</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Nous contacter - La Boutique Française {% endblock %}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block content %}
+    <h2>Nous contacter </h2>
+<div class="row">
+    <p>N'hésitez pas nous contacter, nous vous répondrons dans les meilleurs délais</p>
+    <div class="col-md-8">{{ form(form) }}</div>
+    <div class="col-md-4">
+        <strong>La boutique Complète</strong>
+        <hr>
+        06 54 78 90 23
+        10 rue de la réussite 75000 Paris
+        contact@laboutiquecomplete.com
+    </div>
+</div>
+
+{% endblock %}
